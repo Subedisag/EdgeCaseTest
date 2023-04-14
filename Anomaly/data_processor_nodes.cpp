@@ -484,6 +484,33 @@ namespace hex::plugin::builtin
         }
     };
 
+public:
+    NodeDisplayString() : Node("hex.builtin.nodes.display.string.header", {dp::Attribute(dp::Attribute::IOType::In, dp::Attribute::Type::Buffer, "hex.builtin.nodes.common.input")}) {}
+
+    void drawNode() override
+    {
+        constexpr static auto LineLength = 50;
+        if (ImGui::BeginChild("##string_view", scaled(ImVec2(ImGui::CalcTextSize(" ").x * (LineLength + 4), 150)), true))
+        {
+            std::string_view string = this->m_value;
+
+            ImGuiListClipper clipper;
+            clipper.Begin((string.length() + (LineLength - 1)) / LineLength);
+
+            while (clipper.Step())
+                for (auto i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+                {
+                    auto line = string.substr(i * LineLength, LineLength);
+                    ImGui::TextUnformatted("");
+                    ImGui::SameLine();
+                    ImGui::TextUnformatted(line.data(), line.data() + line.length());
+                }
+
+            clipper.End();
+        }
+        ImGui::EndChild();
+    }
+
     class NodeBitwiseXOR : public dp::Node
     {
     public:
