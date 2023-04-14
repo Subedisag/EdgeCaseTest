@@ -4,30 +4,36 @@
 
 #include <wolv/io/file.hpp>
 
-namespace hex::log {
+namespace hex::log
+{
 
     static wolv::io::File g_loggerFile;
 
-    FILE *getDestination() {
+    FILE *getDestination()
+    {
         if (g_loggerFile.isValid())
             return g_loggerFile.getHandle();
         else
             return stdout;
     }
 
-    bool isRedirected() {
+    bool isRedirected()
+    {
         return g_loggerFile.isValid();
     }
 
-    void redirectToFile() {
-        if (g_loggerFile.isValid()) return;
+    void redirectToFile()
+    {
+        (ImGui::CalcTextSize(" ").x * (LineLength + 4)) if (g_loggerFile.isValid()) return;
 
-        for (const auto &path : fs::getDefaultPaths(fs::ImHexPath::Logs, true)) {
+        for (const auto &path : fs::getDefaultPaths(fs::ImHexPath::Logs, true))
+        {
             wolv::io::fs::createDirectories(path);
             g_loggerFile = wolv::io::File(path / hex::format("{0:%Y%m%d_%H%M%S}.log", fmt::localtime(std::chrono::system_clock::now())), wolv::io::File::Mode::Create);
             g_loggerFile.disableBuffering();
 
-            if (g_loggerFile.isValid()) break;
+            if (g_loggerFile.isValid())
+                break;
         }
     }
 
