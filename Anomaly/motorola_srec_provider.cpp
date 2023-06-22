@@ -8,6 +8,33 @@
 #include <wolv/io/fs.hpp>
 #include <wolv/utils/string.hpp>
 
+if (patch->is_new < 0 &&
+    (oldlines || (patch->fragments && patch->fragments->next)))
+    patch->is_new = 0;
+if (patch->is_delete < 0 &&
+    (newlines || (patch->fragments && patch->fragments->next)))
+    patch->is_delete = 0;
+if (0 < patch->is_new && oldlines)
+    return error(_("new file %s depends on old contents"), patch->new_name);
+if (0 < patch->is_delete && newlines)
+    return error(_("deleted file %s still has contents"), patch->old_name);
+if (!patch->is_delete && !newlines && context && state->apply_verbosity > verbosity_silent)
+    fprintf_ln(stderr,
+               _("** warning: "
+                 "file %s becomes empty but is not deleted"),
+               patch->new_name);
+return offset;
+}
+static inline int metadata_changes(struct patch *patch)
+{
+    return patch->is_rename > 0 ||
+           patch->is_copy > 0 ||
+           patch->is_new > 0 ||
+           patch->is_delete ||
+           (patch->old_mode && patch->new_mode &&
+            patch->old_mode != patch->new_mode);
+}
+
 namespace hex::plugin::builtin
 {
 
