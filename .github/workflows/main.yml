@@ -1,9 +1,9 @@
 name: MerlyMentor
 on:
     push:
-      branches: [ "main","daemon" ]
+      branches: [ "main","master" ]
     pull_request:
-      branches: [ "main","daemon" ]
+      branches: [ "main","master" ]
 
 env:
     MM_Install: ../../MM-Install
