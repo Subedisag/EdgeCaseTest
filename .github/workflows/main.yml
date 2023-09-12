@@ -1,9 +1,9 @@
 name: MerlyMentor
 on:
     push:
-      branches: [ "main","master" ]
+      branches: [ "main","daemon" ]
     pull_request:
-      branches: [ "main","master" ]
+      branches: [ "main","daemon" ]
 
 env:
     MM_Install: ../../MM-Install
@@ -23,10 +23,10 @@ jobs:
                 echo "::add-mask::${{ secrets.MM_KEY }}"
                 mkdir "$MM_Install"
                 cd "$MM_Install"
-                  curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY" install
+                  curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY" install --staging
           
          - name: Run MerlyMentor
            run: |
               echo "::add-mask::${{ secrets.MM_KEY }}"
               cd "$MM_Install"
-              ./MerlyMentor --github-actions -D ${{github.workspace}} check
+              ./MerlyMentor-Staging --github-actions -D ${{github.workspace}}/MP-CodeCheck/src -r MerlyMentor check
