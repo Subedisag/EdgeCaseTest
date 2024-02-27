@@ -23,10 +23,10 @@ jobs:
                 echo "::add-mask::${{ secrets.MM_KEY }}"
                 mkdir "$MM_Install"
                 cd "$MM_Install"
-                  curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY" install --Staging
+                  curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY" install --channel=Test
           
          - name: Run MerlyMentor
            run: |
               echo "::add-mask::${{ secrets.MM_KEY }}"
               cd "$MM_Install"
-              ./MerlyMentor-Staging --github-actions -D ${{github.workspace}}/ -r MerlyMentor-Test check
+              ./MerlyMentor-Test --github-actions -D ${{github.workspace}}/ -r MerlyMentor-Test check
